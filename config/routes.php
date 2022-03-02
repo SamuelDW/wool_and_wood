@@ -43,6 +43,7 @@ return static function (RouteBuilder $routes) {
      * `{action}` markers.
      */
     $routes->setRouteClass(DashedRoute::class);
+    $routes->setExtensions(['json']);
 
     $routes->scope('/', function (RouteBuilder $builder) {
         /*
