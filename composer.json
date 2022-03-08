@@ -16,6 +16,7 @@
         "cakephp/cakephp-codesniffer": "^4.5",
         "cakephp/debug_kit": "^4.5",
         "josegonzalez/dotenv": "^3.2",
+        "phpstan/phpstan": "^1.4",
         "phpunit/phpunit": "~8.5.0 || ^9.3"
     },
     "suggest": {
@@ -44,8 +45,24 @@
         ],
         "cs-check": "phpcs --colors -p  src/ tests/",
         "cs-fix": "phpcbf --colors -p src/ tests/",
-        "stan": "phpstan analyse",
-        "test": "phpunit --colors=always"
+        "stan": "phpstan analyse --memory-limit=1G",
+        "test": "phpunit --colors=always",
+        "empty-database": "bin/cake empty_database",
+        "migrate": "bin/cake migrations migrate -q",
+        "seed": "bin/cake migrations seed --seed DatabaseSeed -q",
+        "npm": "npm install && npm run build",
+        "dbreset": [
+            "@empty-database",
+            "@migrate",
+            "@seed",
+            "bin/cake cache clear _cake_model_ -q"
+        ],
+        "deploy": [
+            "@empty-database",
+            "@migrate",
+            "@seed",
+            "@npm"
+        ]
     },
     "prefer-stable": true,
     "config": {

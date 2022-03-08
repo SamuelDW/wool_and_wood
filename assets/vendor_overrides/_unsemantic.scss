@@ -1,0 +1,36 @@
+.gc {
+    @extend %grid-container;
+}
+
+
+.gp {
+    @extend %grid-parent;
+}
+
+.m-hide {
+    @extend .hide-on-mobile;
+}
+
+.t-hide {
+    @extend .hide-on-tablet;
+}
+
+.g-hide {
+    @extend %hide;
+}
+
+@for $i from 1 through 19 {
+    $num: $i * 5;
+
+    .m-#{$num} {
+        @extend %mobile-grid-#{$num};
+    }
+
+    .t-#{$num} {
+        @extend %tablet-grid-#{$num};
+    }
+
+    .g-#{$num} {
+        @extend %grid-#{$num};
+    }
+}
