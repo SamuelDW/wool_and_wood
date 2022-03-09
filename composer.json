@@ -6,16 +6,21 @@
     "license": "MIT",
     "require": {
         "php": ">=7.2",
+        "cakephp/authentication": "^2.9",
         "cakephp/cakephp": "^4.3",
         "cakephp/migrations": "^3.2",
         "cakephp/plugin-installer": "^1.3",
-        "mobiledetect/mobiledetectlib": "^2.8"
+        "fzaninotto/faker": "^1.9",
+        "mobiledetect/mobiledetectlib": "^2.8",
+        "robmorgan/phinx": "^0.12.10"
     },
     "require-dev": {
         "cakephp/bake": "^2.6",
         "cakephp/cakephp-codesniffer": "^4.5",
         "cakephp/debug_kit": "^4.5",
+        "dereuromark/cakephp-ide-helper": "^1.17",
         "josegonzalez/dotenv": "^3.2",
+        "phpstan/phpstan": "^1.4",
         "phpunit/phpunit": "~8.5.0 || ^9.3"
     },
     "suggest": {
@@ -40,12 +45,32 @@
         "post-create-project-cmd": "App\\Console\\Installer::postInstall",
         "check": [
             "@test",
-            "@cs-check"
+            "@cs-check",
+            "@stan",
+            "@annotate"
         ],
+        "annotate": "bin/cake annotate all",
         "cs-check": "phpcs --colors -p  src/ tests/",
         "cs-fix": "phpcbf --colors -p src/ tests/",
-        "stan": "phpstan analyse",
-        "test": "phpunit --colors=always"
+        "test": "phpunit --colors=always",
+        "retest": "phpunit --colors=always --cache-result --order-by=defects --stop-on-defect",
+        "stan": "phpstan analyse --memory-limit=1G",
+        "empty-database": "bin/cake empty_database",
+        "migrate": "bin/cake migrations migrate -q",
+        "seed": "bin/cake migrations seed --seed DatabaseSeed -q",
+        "npm": "npm install && npm run build",
+        "dbreset": [
+            "@empty-database",
+            "@migrate",
+            "@seed",
+            "bin/cake cache clear _cake_model_ -q"
+        ],
+        "deploy": [
+            "@empty-database",
+            "@migrate",
+            "@seed",
+            "@npm"
+        ]
     },
     "prefer-stable": true,
     "config": {

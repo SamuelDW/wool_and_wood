@@ -1,86 +1,71 @@
-name: CI
+name: Wool & Wood Tests and Checks
 
 on:
   push:
-    branches:
-      - '4.x'
-      - '4.next'
-      - '5.x'
+    branches: [main]
   pull_request:
-    branches:
-      - '*'
+    branches: [main]
 
 jobs:
   testsuite:
     runs-on: ubuntu-18.04
-    strategy:
-      fail-fast: false
-      matrix:
-        php-version: ['7.2', '7.4', '8.0', '8.1']
-    name: PHP ${{ matrix.php-version }}
 
     steps:
-    - uses: actions/checkout@v2
+      - name: Enable MySQL
+        run: sudo systemctl start mysql.service
 
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: ${{ matrix.php-version }}
-        extensions: mbstring, intl, pdo_sqlite
-        coverage: none
+      - name: Create databases and test user in MySQL
+        run: |
+         mysql -u root -proot -e "CREATE DATABASE wool_and_wood CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci"
+         mysql -u root -proot -e "CREATE DATABASE test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci"
+         mysql -u root -proot -e "GRANT ALL PRIVILEGES ON *.* TO 'test'@'%' identified by 'test'"
 
-    - name: Composer install
-      run: |
-        if [[ ${{ matrix.php-version }} == '8.1' ]]; then
-          composer update --ignore-platform-reqs
-        else
-          composer update
-        fi
-        composer run-script post-install-cmd --no-interaction
+      - uses: actions/checkout@v2
 
-    - name: Run PHPUnit
-      run: |
-        cp config/app_local.example.php config/app_local.php
-        vendor/bin/phpunit
-      env:
-        DATABASE_TEST_URL: sqlite://./testdb.sqlite
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 7.3
 
-  coding-standard:
-    name: Coding Standard
-    runs-on: ubuntu-18.04
+      - name: Validate Composer Files
+        run: composer validate
 
-    steps:
-    - uses: actions/checkout@v2
+      - name: Cache Composer Packages
+        id: composer-cache
+        uses: actions/cache@v2
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
 
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: '7.2'
-        extensions: mbstring, intl
-        coverage: none
+      - name: Install Dependencies
+        env:
+          COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ secrets.GITHUB_TOKEN }}" }}'
+        run: composer install --no-interaction --no-plugins
 
-    - name: Composer install
-      run: composer install
+      - name: Copy app_ci to app_local
+        run: cp config/app_ci.php config/app_local.php
 
-    - name: Run PHP CodeSniffer
-      run: composer cs-check
+      - name: Run Migrations
+        run: |
+          php bin/cake.php migrations migrate
+          php bin/cake.php migrations seed --seed DatabaseSeed
 
-  static-analysis:
-    name: Static Analysis
-    runs-on: ubuntu-18.04
+      - name: Run Code Sniffer
+        if: ${{ always() }}
+        run: composer cs-check
 
-    steps:
-    - uses: actions/checkout@v2
+      - name: Run Annotations
+        if: ${{ success() }}
+        run: php bin/cake.php annotate all -v -d --ci
 
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: '7.2'
-        extensions: mbstring, intl
-        coverage: none
+      - name: Run PHPStan
+        if: ${{ always() }}
+        run: composer stan
 
-    - name: Composer install
-      run: composer require --dev phpstan/phpstan:^1.0.0
+      - name: Run Unit Tests
+        if: ${{ success() }}
+        run: composer test
 
-    - name: Run phpstan
-      run: vendor/bin/phpstan
+
