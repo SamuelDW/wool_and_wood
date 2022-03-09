@@ -1,3 +1,4 @@
+@use "sass:math";
 // These mixins are intended to be used from:
 //
 //   * unsemantic-grid-base.scss
@@ -256,7 +257,7 @@ $lang-reverse: right !default;
   // For 5 through 95 percent.
   @for $i from 1 through 19 {
     $num: $i * 5;
-    $decimal: $num / 100;
+    $decimal: math.div($num, 100);
     $percent: $num * 1%;
 
     %#{$scope}grid-#{$num} {
@@ -297,7 +298,7 @@ $lang-reverse: right !default;
   // For one-third and two-thirds.
   @for $i from 1 through 2 {
     $num: $i * 33;
-    $one-third: 1 / 3;
+    $one-third: math.div(1, 3);
     $decimal: $i * $one-third;
     $percent: ($num + $decimal) * 1%;
 
