@@ -41,7 +41,7 @@ jobs:
 
       - name: Install Dependencies
         env:
-          COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ secrets.PACKAGES_ACCESS_TOKEN }}" }}'
+          COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ secrets.GITHUB_TOKEN }}" }}'
         run: composer install --no-interaction --no-plugins
 
       - name: Run Migrations
