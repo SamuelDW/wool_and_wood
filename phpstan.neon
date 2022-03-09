@@ -6,3 +6,7 @@ parameters:
         - src/
     excludePaths:
         - src/Console/Installer.php
+    bootstrapFiles:
+        - %rootDir%/../../../config/bootstrap.php
+    scanDirectories:
+        - %rootDir%/../../../config

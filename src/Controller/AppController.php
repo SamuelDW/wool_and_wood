@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Cake\Controller\Controller;
+use Cake\Http\Exception\NotFoundException;
 
 /**
  * Application Controller
@@ -48,6 +49,24 @@ class AppController extends Controller
          * Enable the following component for recommended CakePHP form protection settings.
          * see https://book.cakephp.org/4/en/controllers/components/form-protection.html
          */
-        //$this->loadComponent('FormProtection');
+        $this->loadComponent('FormProtection');
+        $this->loadComponent('Security');
+    }
+
+    /**
+     * Handle the delivery of node_modules js files installed by npm
+     *
+     * @param mixed $pathPieces The split up pieces of the path
+     * @return \Cake\Http\Response
+     * @throws \Cake\Http\Exception\NotFoundException
+     */
+    public function scripts(...$pathPieces)
+    {
+        $filePath = ROOT . DS . 'node_modules' . DS . implode(DS, $pathPieces);
+        if (!file_exists($filePath)) {
+            throw new NotFoundException(__('The requested file could not be located'));
+        }
+
+        return $this->response->withFile($filePath);
     }
 }
