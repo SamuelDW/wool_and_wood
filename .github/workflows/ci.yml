@@ -20,7 +20,7 @@ jobs:
          mysql -u root -proot -e "CREATE DATABASE test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci"
          mysql -u root -proot -e "GRANT ALL PRIVILEGES ON *.* TO 'test'@'%' identified by 'test"
 
-      - uses: action/checkout@v2
+      - uses: actions/checkout@v2
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
