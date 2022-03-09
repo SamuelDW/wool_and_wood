@@ -44,10 +44,14 @@ jobs:
           COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ secrets.GITHUB_TOKEN }}" }}'
         run: composer install --no-interaction --no-plugins
 
+      - name: Copy app_ci to app_local
+        run: cp config/app_ci.php config/app_local.php
+
       - name: Run Migrations
         run: |
           php bin/cake.php migrations migrate
           php bin/cake.php migrations seed --seed DatabaseSeed
+
       - name: Run Code Sniffer
         if: ${{ always() }}
         run: composer cs-check
