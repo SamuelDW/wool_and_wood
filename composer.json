@@ -60,6 +60,7 @@
         "migrate": "bin/cake migrations migrate -q",
         "seed": "bin/cake migrations seed --seed DatabaseSeed -q",
         "npm": "npm install && npm run build",
+        "assets": "sass assets/app.scss webroot/css/app.css",
         "dbreset": [
             "@empty-database",
             "@migrate",
