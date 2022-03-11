@@ -20,7 +20,24 @@ class TagsSeed extends AbstractSeed
      */
     public function run()
     {
-        $data = [];
+        $data = [
+            [
+                'id' => 1,
+                'title' => 'Small',
+                'created' => date('Y-m-d H:i:s'),
+                'modified' => date('Y-m-d H:i:s'),
+            ], [
+                'id' => 2,
+                'title' => 'Medium',
+                'created' => date('Y-m-d H:i:s'),
+                'modified' => date('Y-m-d H:i:s'),
+            ], [
+                'id' => 3,
+                'title' => 'Sci-Fi',
+                'created' => date('Y-m-d H:i:s'),
+                'modified' => date('Y-m-d H:i:s'),
+            ]
+        ];
 
         $table = $this->table('tags');
         $table->insert($data)->save();

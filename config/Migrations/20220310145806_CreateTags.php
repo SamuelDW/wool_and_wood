@@ -20,10 +20,6 @@ class CreateTags extends AbstractMigration
             'limit' => 255,
             'null' => false,
         ]);
-        $table->addColumn('content', 'text', [
-            'default' => null,
-            'null' => false,
-        ]);
         $table->addColumn('created', 'datetime', [
             'default' => null,
             'null' => false,

@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use Fzaninotto\Faker\Factory;
 use Migrations\AbstractSeed;
 
 /**
@@ -20,7 +21,19 @@ class CustomersSeed extends AbstractSeed
      */
     public function run()
     {
+        $faker = Faker\Factory::create('en_GB');
         $data = [];
+        for ($i = 0; $i < 30; $i++) {
+            $data[] = [
+                'first_name' => $faker->firstName,
+                'last_name' => $faker->lastName,
+                'email' => $faker->email,
+                'address' => $faker->address,
+                'telephone' => $faker->phoneNumber,
+                'created' => date('Y-m-d H:i:s'),
+                'modified' => date('Y-m-d H:i:s'),
+            ];
+        }
 
         $table = $this->table('customers');
         $table->insert($data)->save();

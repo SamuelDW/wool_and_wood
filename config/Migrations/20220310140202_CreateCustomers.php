@@ -44,7 +44,7 @@ class CreateCustomers extends AbstractMigration
             'default' => null,
             'null' => false,
         ]);
-        $table->addColumn('modifed', 'string', [
+        $table->addColumn('modified', 'string', [
             'default' => null,
             'limit' => 255,
             'null' => false,

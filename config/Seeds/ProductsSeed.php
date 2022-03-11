@@ -20,7 +20,25 @@ class ProductsSeed extends AbstractSeed
      */
     public function run()
     {
-        $data = [];
+        $data = [
+            [
+                'id' => 1,
+                'title' => 'Wool Tree',
+                'summary' => 'Hand woven tree, of various colours',
+                'price' => 5.99,
+                'status' => 'active',
+                'created' => date('Y-m-d H:i:s'),
+                'modified' => date('Y-m-d H:i:s'),
+            ], [
+                'id' => 2,
+                'title' => 'Stitch',
+                'summary' => 'Hand woven stitch for kids and lovers of the show',
+                'price' => 10.99,
+                'status' => 'active',
+                'created' => date('Y-m-d H:i:s'),
+                'modified' => date('Y-m-d H:i:s'),
+            ],
+        ];
 
         $table = $this->table('products');
         $table->insert($data)->save();
