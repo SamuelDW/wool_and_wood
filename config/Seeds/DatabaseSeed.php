@@ -18,9 +18,20 @@ class DatabaseSeed extends AbstractSeed
      */
     public function run()
     {
+        $this->call('UsersSeed');
 
         // Don't seed in production
         if (Configure::read('debug')) {
+            $this->call('CustomersSeed');
+            $this->call('ProductsSeed');
+            $this->call('TagsSeed');
+            $this->call('CategoriesSeed');
+            $this->call('ProductTagsSeed');
+            $this->call('OrdersSeed');
+            $this->call('ProductCategoriesSeed');
+            $this->call('TransactionsSeed');
+            $this->call('OrderItemsSeed');
+            $this->call('ProductReviewsSeed');
         }
     }
 }
