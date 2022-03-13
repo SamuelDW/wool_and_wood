@@ -24,7 +24,7 @@ class UsersSeed extends AbstractSeed
         $data = [
             [
                 'id' => 1,
-                'email' => 'w@wool&wood.co.uk',
+                'email' => 'w@woolandwood.co.uk',
                 'first_name' => 'Samuel',
                 'last_name' => 'Walker',
                 'job_title' => 'Chief Technical Officer',

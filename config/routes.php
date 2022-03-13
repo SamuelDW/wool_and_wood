@@ -22,6 +22,7 @@
  * @var \Cake\Routing\RouteBuilder $routes
  */
 
+use Cake\Http\Middleware\CsrfProtectionMiddleware;
 use Cake\Routing\Route\DashedRoute;
 use Cake\Routing\RouteBuilder;
 
@@ -47,12 +48,26 @@ return static function (RouteBuilder $routes) {
     $routes->setExtensions(['json']);
 
     $routes->scope('/', function (RouteBuilder $builder) {
+        // Register scoped middleware for in scopes.
+        $builder->registerMiddleware('csrf', new CsrfProtectionMiddleware([
+            'httponly' => true,
+        ]));
+
+        /*
+        * Apply a middleware to the current route scope.
+        * Requires middleware to be registered through `Application::routes()` with `registerMiddleware()`
+        */
+        $builder->applyMiddleware('csrf');
         /*
          * Here, we are connecting '/' (base path) to a controller called 'Pages',
          * its action called 'display', and we pass a param to select the view file
          * to use (in this case, templates/Pages/home.php)...
          */
         $builder->connect('/', ['controller' => 'Home', 'action' => 'index']);
+
+         // Allow access to the node_modules folder through this method
+        // '/**' means the path is passed as one single variable
+        $builder->connect('/scripts/**', ['controller' => 'App', 'action' => 'scripts']);
 
         /*
          * Connect catchall routes for all controllers.
@@ -85,4 +100,7 @@ return static function (RouteBuilder $routes) {
      * });
      * ```
      */
+        $routes->prefix('Admin', ['_namePrefix' => 'admin:'], function (RouteBuilder $builder) {
+        $builder->fallbacks(DashedRoute::class);
+     });
 };
