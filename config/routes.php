@@ -57,7 +57,7 @@ return static function (RouteBuilder $routes) {
         * Apply a middleware to the current route scope.
         * Requires middleware to be registered through `Application::routes()` with `registerMiddleware()`
         */
-        $builder->applyMiddleware('csrf');
+       // $builder->applyMiddleware('csrf');
         /*
          * Here, we are connecting '/' (base path) to a controller called 'Pages',
          * its action called 'display', and we pass a param to select the view file
@@ -100,7 +100,4 @@ return static function (RouteBuilder $routes) {
      * });
      * ```
      */
-        $routes->prefix('Admin', ['_namePrefix' => 'admin:'], function (RouteBuilder $builder) {
-        $builder->fallbacks(DashedRoute::class);
-     });
 };
