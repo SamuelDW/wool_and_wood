@@ -2426,4 +2426,19 @@ body {
   width: 100%;
 }
 
+button {
+  padding: 1rem;
+  color: green;
+}
+
+.product-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border: 2px solid red;
+  width: 90%;
+  margin-top: 1rem;
+  padding: 0.5rem;
+}
+
 /*# sourceMappingURL=app.css.map */
