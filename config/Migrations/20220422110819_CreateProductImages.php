@@ -25,6 +25,11 @@ class CreateProductImages extends AbstractMigration
             'limit' => 255,
             'null' => false,
         ]);
+        $table->addColumn('alt_text', 'string', [
+            'default' => null,
+            'limit' => 100,
+            'null' => false,
+        ]);
         $table->addColumn('created', 'datetime', [
             'default' => null,
             'null' => false,

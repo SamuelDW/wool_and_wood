@@ -40,7 +40,7 @@ class ProductCardCell extends Cell
      */
     public function display(Product $product)
     {
-        $productAverageReview = $this->ProductReviews->findAverageReviewScoreByProductId($product->id);
-        $this->set(compact('product'));
+        $productReviews = $this->ProductReviews->findAverageReviewScoreByProductId($product->id);
+        $this->set(compact('product', 'productReviews'));
     }
 }

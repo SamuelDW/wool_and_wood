@@ -28,20 +28,5 @@
                 </div>
             </nav>
         </div>
-        <div class="gc" id="search-bar">
-            <div class="m-100">
-                <?= $this->Form->control('search', [
-                    'class' => 'input-text',
-                    'id' => 'universal-search',
-                    'label' => 'Search',
-                    'placeholder' => 'Search...',
-                    'data-ajax-url' => $this->Url->build([
-                        'controller' => 'Searches',
-                        'action' => 'freeText',
-                        '_ext' => 'json',
-                    ]),
-                ]) ?>
-            </div>
-        </div>
     </div>
 </header>

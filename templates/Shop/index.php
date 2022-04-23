@@ -8,6 +8,7 @@
 
 $this->assign('title', 'Wool & Wood | Shop');
 ?>
+<?= $this->element('Shop/filter') ?>
 <div class="gc">
     <div class="m-90 m-pre-5">
 

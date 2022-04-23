@@ -2426,6 +2426,10 @@ body {
   width: 100%;
 }
 
+input {
+  width: 100%;
+}
+
 button {
   padding: 1rem;
   color: green;
@@ -2439,6 +2443,10 @@ button {
   width: 90%;
   margin-top: 1rem;
   padding: 0.5rem;
+}
+
+#search {
+  width: 80%;
 }
 
 /*# sourceMappingURL=app.css.map */
