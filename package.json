@@ -1,0 +1,31 @@
+{
+  "name": "wool_and_wood",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Samuel Durrant-Walker",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "ejs": "^3.1.8",
+    "express": "^4.18.2",
+    "helmet": "^6.0.1",
+    "mariadb": "^3.0.2",
+    "morgan": "^1.10.0",
+    "sequelize": "^6.26.0"
+  },
+  "devDependencies": {
+    "chai": "^4.3.7",
+    "eslint": "^8.29.0",
+    "mocha": "^10.1.0",
+    "nodemon": "^2.0.20",
+    "sass": "^1.56.2",
+    "supertest": "^6.3.3",
+    "webpack": "^5.75.0"
+  }
+}
