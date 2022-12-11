@@ -25,7 +25,6 @@
     "mocha": "^10.1.0",
     "nodemon": "^2.0.20",
     "sass": "^1.56.2",
-    "supertest": "^6.3.3",
-    "webpack": "^5.75.0"
+    "supertest": "^6.3.3"
   }
 }
