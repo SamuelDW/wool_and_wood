@@ -27,6 +27,7 @@ self.addEventListener('install', event => {
 		for (let asset of coreAssets) {
 			cache.add(new Request(asset))
 		}
+		cache.add(new Request('offline.html'))
 
 		return cache
 	}))
@@ -55,11 +56,12 @@ self.addEventListener('fetch', event => {
 				return response
 
 			// eslint-disable-next-line no-unused-vars
-			}).catch(async (error) => {
+			}).catch((error) => {
 
 				// If there's no item in cache, respond with a fallback
-				const response = await caches.match(request)
-				return response || caches.match('/offline.html')
+				return caches.match(request).then(function (response) {
+					return response || caches.match('/offline.html')
+				})
 
 			})
 		)
