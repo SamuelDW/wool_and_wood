@@ -1,45 +1,103 @@
-const cacheName = 'wool_and_wood'
-const runtime = 'runtime'
-
-const assetsToCache = [
-	'./css/app.css'
-]
-
-self.addEventListener('install', event => {
+self.addEventListener('activate', (event) => {
+	var cacheWhitelist = ['wool_and_wood_v1']
 	event.waitUntil(
-		caches.open(cacheName)
-			.then(cache => cache.addAll(assetsToCache))
-			.then(self.skipWaiting())
+		caches.keys().then((cacheNames) => {
+			return Promise.all(
+				cacheNames.map((cacheName) => {
+					if (cacheWhitelist.indexOf(cacheName) === -1) {
+						return caches.delete(cacheName)
+					}
+				})
+			)
+		})
 	)
 })
 
+let coreAssets = [
+	'/css/app.css',
+	'/js/main.js',
+	'/img/logo.svg',
+	'/img/favicon.ico',
+]
+
+let cacheName = 'wool_and_wood_v1'
+
 self.addEventListener('install', event => {
-	event.waitUntil(
-		caches.open(cacheName)
-			.then(cache => cache.addAll(assetsToCache))
-			.then(self.skipWaiting())
-	)
+	event.waitUntil(caches.open(cacheName).then(cache => {
+		for (let asset of coreAssets) {
+			cache.add(new Request(asset))
+		}
+
+		return cache
+	}))
 })
 
 self.addEventListener('fetch', event => {
-	// Skip cross-origin requests, like those for Google Analytics.
-	if (event.request.url.startsWith(self.location.origin)) {
-		event.respondWith(
-			caches.match(event.request).then(cachedResponse => {
-				if (cachedResponse) {
-					return cachedResponse
-				}
+	let request = event.request
 
-				return caches.open(runtime).then(cache => {
-					return fetch(event.request).then(response => {
-						// Put a copy of the response in the runtime cache.
-						return cache.put(event.request, response.clone()).then(() => {
-							return response
-						})
-					})
+	// Bug fix
+	// https://stackoverflow.com/a/49719964
+	if (event.request.cache === 'only-if-cached' && event.request.mode !== 'same-origin') return
+
+	// HTML files
+	// Network-first
+	if (request.headers.get('Accept').includes('text/html')) {
+		event.respondWith(
+			fetch(request).then(function (response) {
+
+				// Create a copy of the response and save it to the cache
+				let copy = response.clone()
+				event.waitUntil(caches.open(cacheName).then(function (cache) {
+					return cache.put(request, copy)
+				}))
+
+				// Return the response
+				return response
+
+			// eslint-disable-next-line no-unused-vars
+			}).catch(async (error) => {
+
+				// If there's no item in cache, respond with a fallback
+				const response = await caches.match(request)
+				return response || caches.match('/offline.html')
+
+			})
+		)
+	}
+
+	// CSS & JavaScript
+	// Offline-first
+	if (request.headers.get('Accept').includes('text/css') || request.headers.get('Accept').includes('text/javascript')) {
+		event.respondWith(
+			caches.match(request).then(function (response) {
+				return response || fetch(request).then(function (response) {
+
+					// Return the response
+					return response
+
+				})
+			})
+		)
+		return
+	}
+
+	// Images
+	// Offline-first
+	if (request.headers.get('Accept').includes('image')) {
+		event.respondWith(
+			caches.match(request).then(function (response) {
+				return response || fetch(request).then(function (response) {
+
+					// Save a copy of it in cache
+					let copy = response.clone()
+					event.waitUntil(caches.open(cacheName).then(function (cache) {
+						return cache.put(request, copy)
+					}))
+
+					// Return the response
+					return response
 				})
 			})
 		)
 	}
 })
-

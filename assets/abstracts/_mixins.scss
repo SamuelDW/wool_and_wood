@@ -1,0 +1,40 @@
+/// Helper to style fonts in an element
+/// @author Samuel Durrant-Walker
+/// @param {Length} $weight
+/// @param {Length} $size
+/// @param {Length} $line-height
+/// @param {Length} $spacing
+@mixin font-helper($weight, $size, $line-height, $spacing) {
+    font-weight: $weight;
+    font-size: $size;
+    line-height: $line-height;
+    letter-spacing: $spacing
+}
+
+/// Helper to size elements, height defaults to the width.
+/// @author Samuel Durrant-Walker
+/// @param {Length} $width
+/// @param {Length} $height
+@mixin size($width, $height: $width) {
+    width: $width;
+    height: $height;
+}
+
+/// Helper to center items exactly with flex
+/// @author Samuel Durrant-Walker
+@mixin center-content-flex {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+/// Helper to align items
+/// @author Samuel Durrant-Walker
+/// @param {*} $align-items
+/// @param {*} $justify-content
+/// @param {*} $display defaults to flex
+@mixin content-alignment($align-items, $justify-content, $display: flex) {
+    justify-content: $justify-content;
+    align-items: $align-items;
+    display: $display;
+}
